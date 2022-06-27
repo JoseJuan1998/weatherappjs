@@ -1,5 +1,5 @@
 .loading {
-  background-image: url('images/sara.png'), var(--gradient);
+  background-image: url('../images/sara.png'), var(--gradient);
   background-repeat: no-repeat;
   background-position: center;
   block-size: 100vh;

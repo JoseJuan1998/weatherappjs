@@ -26,5 +26,5 @@ p.currentWeather-date {
 .currentWeather-city {
   font: var(--caption-caption);
   padding-inline-start: 1rem;
-  background: url('images/pin-icon.svg') no-repeat left center;
+  background: url('../images/pin-icon.svg') no-repeat left center;
 }
