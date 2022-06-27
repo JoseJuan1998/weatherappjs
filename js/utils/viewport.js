@@ -1,6 +1,6 @@
 export function setViewportSize($el) {
   const v = getViewport()
-  $el.style.blocksize = `0px`
+  $el.style.blocksize = `${v}px`
 }
 
 export function getViewport() {
