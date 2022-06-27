@@ -7,7 +7,7 @@
 
 .app {
   block-size: 100vh;
-  background-image: url('../images/morning-clean.jpg');
+  background-image: url('images/morning-clean.jpg');
   background-size: cover;
   background-position: right bottom;
   display: flex;
