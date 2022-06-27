@@ -36,7 +36,7 @@ function setBackgound($el, conditionCode, solarStatus) {
     "(-webkit-min-device-pixel-ratio: 2)"
   ).matches;
   const resolution = match ? "@2x" : "";
-  $el.style.backgroundImage = `url(images/${solarStatus}-${weatherConditions}${resolution}.jpg)`;
+  $el.style.backgroundImage = `url(../images/${solarStatus}-${weatherConditions}${resolution}.jpg)`;
 }
 
 function configCurrentWeather(weather) {
