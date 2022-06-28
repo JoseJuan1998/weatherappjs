@@ -2,6 +2,7 @@ import { getCurrentPosition } from "./geolocation.js";
 import { getWeather } from "./services/weather.js";
 import { formatWeekList, formatTemp } from "./utils/format-data.js";
 import { createDOM } from "./utils/dom.js";
+import draggable from "./draggable.js";
 
 function getTime(hour) {
   return hour >= 12 ? "p" : "a";
@@ -27,6 +28,8 @@ function dayItemTemplate(weather) {
       <span class="dayWeather-time">${relativeHour} ${time}.&nbsp;m.</span>
       <img
         class="dayWeather-icon"
+        height="48px"
+        width="48px"
         src="https://openweathermap.org/img/wn/${icon}.png"
         alt="light"
         rain=""
@@ -81,11 +84,13 @@ function configWeeklyWeather(weekList) {
 }
 
 async function weeklyWeather() {
+  const $container = document.querySelector('.weeklyWeather')
   try {
     const { latitude, longitude } = await getCurrentPosition();
     const data = await getWeather(latitude, longitude, "forecast");
     const weekList = formatWeekList(data.list);
     configWeeklyWeather(weekList);
+    draggable($container);
   } catch (error) {
     console.log(error);
   }
