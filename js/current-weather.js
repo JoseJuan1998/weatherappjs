@@ -2,11 +2,11 @@
 import { formatDate, formatTemp } from "./utils/format-data.js";
 import { weatherConditionsCodes } from "./constants.js";
 import { getCurrentPosition } from "./geolocation.js";
-import { getCurrentWeather } from './services/weather.js'
+import { getWeather } from "./services/weather.js";
 
 function showCurrentWeather($app, $loader) {
-  $app.hidden = false
-  $loader.hidden = true
+  $app.hidden = false;
+  $loader.hidden = true;
 }
 
 function setCurrentCity($el, city) {
@@ -51,7 +51,7 @@ function configCurrentWeather(weather) {
   const $app = document.querySelector("#app");
   const $loader = document.querySelector("#loading");
   // loader
-  showCurrentWeather($app, $loader)
+  showCurrentWeather($app, $loader);
   // date
   setCurrentCity($currentWeatherCity, city);
   setCurrentDate($currentWeatherDate);
@@ -65,19 +65,14 @@ function configCurrentWeather(weather) {
   );
 }
 
-function currentWeather(){
-  const weather = 
-    getCurrentPosition()
-      .then(({latitude, longitude}) => {
-        getCurrentWeather(latitude, longitude)
-        .then(data => {
-          configCurrentWeather(data);
-        })
-        .catch(_ => console.log('error accediendo a la api'))
-      })
-      .catch(error => {
-        console.log(error)
-      })
+async function currentWeather() {
+  try {
+    const { latitude, longitude } = await getCurrentPosition();
+    const data = await getWeather(latitude, longitude, "weather");
+    configCurrentWeather(data);
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export default currentWeather;

@@ -1,11 +1,13 @@
-import currentWeather from './current-weather.js'
-import { ViewportSize } from './utils/viewport.js'
-import './tabs.js'
+import currentWeather from "./current-weather.js";
+import weeklyWeather from "./weekly-weather.js";
+import { viewportSize } from "./utils/viewport.js";
+import "./tabs.js";
 
-const $app = document.querySelector('#app')
-const $loader = document.querySelector('#loading')
+const $app = document.querySelector("#app");
+const $loader = document.querySelector("#loading");
 
-ViewportSize($app)
-ViewportSize($loader)
+viewportSize($app);
+viewportSize($loader);
 
-currentWeather()
+currentWeather();
+weeklyWeather();
