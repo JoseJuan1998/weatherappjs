@@ -13,7 +13,7 @@ function getHour(hour) {
 
 function dayItemTemplate(weather) {
   const temp = formatTemp(weather.main.temp);
-  const hour = new Date(weather.dt_txt).getHours();
+  const hour = new Date(weather.dt * 1000).getHours();
   const time = getTime(hour);
   const relativeHour = getHour(hour);
   const match = window.matchMedia(
