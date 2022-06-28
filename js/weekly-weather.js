@@ -31,7 +31,7 @@ function dayItemTemplate(weather) {
         alt="light"
         rain=""
       />
-      <span class="dayWeather-temp">${temp}°</span>
+      <span class="dayWeather-temp">${temp}</span>
     </li>
   `;
 }
