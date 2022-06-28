@@ -84,7 +84,6 @@ async function weeklyWeather() {
   try {
     const { latitude, longitude } = await getCurrentPosition();
     const data = await getWeather(latitude, longitude, "forecast");
-    console.log(data.list);
     const weekList = formatWeekList(data.list);
     configWeeklyWeather(weekList);
   } catch (error) {
