@@ -1,6 +1,6 @@
 const defaultConfig = {
   open: true,
-  debug: true,
+  debug: false,
   animatable: true,
 };
 
@@ -10,8 +10,12 @@ export default function draggable($element, config = defaultConfig) {
       `Elemento invalido se esperaba un HTLMElement y se recibio ${$element}`
     );
 
+  config.animatable ? setAnimations() : null;
+
   let isOpen = config.open;
   let isDragging = false;
+
+  let startY = 0;
 
   const ELEMENT_BLOCK_SIZE = $element.getBoundingClientRect().height;
 
@@ -32,34 +36,71 @@ export default function draggable($element, config = defaultConfig) {
   $marker.addEventListener("pointercancel", handlePointerCancel);
   $marker.addEventListener("pointermove", handlePointerMove);
 
+  function setAnimations() {
+    $element.style.transition = "margin-bottom .3s";
+  }
+
+  function bounce() {
+    if (isOpen) return widgetPosition < 60 ? open() : close();
+
+    return widgetPosition < HIDDEN_Y_POSITION - 60 ? open() : close();
+  }
+
   function handlePointerDown(event) {
     logger("DOWN");
+    startDrag(event);
   }
 
   function handlePointerUp(event) {
     logger("UP");
+    dragEnd();
   }
 
   function handlePointerOut(event) {
     logger("OUT");
+    dragEnd();
   }
 
   function handlePointerCancel(event) {
     logger("CANCEL");
+    dragEnd();
+  }
+
+  function dragEnd() {
+    isDragging = false;
+    bounce();
   }
 
   function handlePointerMove(event) {
     logger("MOVING");
+    drag(event);
   }
 
   function handleToggleClick() {
     logger("CLICK");
-    toggle()
+    toggle();
+  }
+
+  function startDrag(event) {
+    startY = pageY(event);
+  }
+
+  function pageY(event) {
+    return event.pageY || event.touches[0].pageY;
+  }
+
+  function getMovement(movementY) {
+    widgetPosition += movementY;
+    if (widgetPosition > HIDDEN_Y_POSITION)
+      return (widgetPosition = HIDDEN_Y_POSITION);
+
+    if (widgetPosition < 0) return (widgetPosition = 0);
+
+    return widgetPosition;
   }
 
   function toggle() {
-    if(!isDragging)
-      return !isOpen ? open() : close();
+    if (!isDragging) return !isOpen ? open() : close();
   }
 
   function logger(message) {
@@ -84,5 +125,14 @@ export default function draggable($element, config = defaultConfig) {
 
   function setWidgetPosition(value) {
     $element.style.marginBottom = `-${value}px`;
+  }
+
+  function drag(event) {
+    isDragging = true;
+    const cursorY = pageY(event);
+    const movementY = cursorY - startY;
+    setWidgetPosition(getMovement(movementY));
+    startY = cursorY;
+    logger({ movementY });
   }
 }

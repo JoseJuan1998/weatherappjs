@@ -71,7 +71,7 @@ async function currentWeather() {
     const data = await getWeather(latitude, longitude, "weather");
     configCurrentWeather(data);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 

@@ -84,7 +84,7 @@ function configWeeklyWeather(weekList) {
 }
 
 async function weeklyWeather() {
-  const $container = document.querySelector('.weeklyWeather')
+  const $container = document.querySelector(".weeklyWeather");
   try {
     const { latitude, longitude } = await getCurrentPosition();
     const data = await getWeather(latitude, longitude, "forecast");

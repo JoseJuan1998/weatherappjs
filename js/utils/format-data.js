@@ -13,15 +13,15 @@ export function formatTemp(temp) {
 }
 
 export function formatWeekList(rawData) {
-  const weekList = []
-  let dayList = []
+  const weekList = [];
+  let dayList = [];
   rawData.forEach((item, index) => {
-    dayList.push(item)
+    dayList.push(item);
 
-    if((index + 1) % 8 === 0) {
-      weekList.push(dayList.slice(0,6))
-      dayList = []
+    if ((index + 1) % 8 === 0) {
+      weekList.push(dayList.slice(0, 6));
+      dayList = [];
     }
-  })
-  return weekList
+  });
+  return weekList;
 }
