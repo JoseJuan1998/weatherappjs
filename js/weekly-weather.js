@@ -8,7 +8,7 @@ function getTime(hour) {
 }
 
 function getHour(hour) {
-  return hour % 12 == 0 ? "12" : hour % 12;
+  return hour % 12 == 0 ? 12 : hour % 12;
 }
 
 function dayItemTemplate(weather) {
