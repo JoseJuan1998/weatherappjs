@@ -19,7 +19,7 @@ export function formatWeekList(rawData) {
     dayList.push(item);
 
     if ((index + 1) % 8 === 0) {
-      weekList.push(dayList.slice(0, 6));
+      weekList.push(dayList);
       dayList = [];
     }
   });
