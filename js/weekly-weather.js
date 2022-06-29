@@ -3,6 +3,7 @@ import { getWeather } from "./services/weather.js";
 import { formatWeekList, formatTemp, formatHumidity, formatWind } from "./utils/format-data.js";
 import { createDOM } from "./utils/dom.js";
 import draggable from "./draggable.js";
+import configurePanels from "./panels.js";
 
 function getTime(hour) {
   return hour >= 12 ? "p" : "a";
@@ -12,7 +13,7 @@ function getHour(hour) {
   return hour % 12 == 0 ? 12 : hour % 12;
 }
 
-function dayItemTemplate(weather, index) {
+function dayItemTemplate(weather, index, parentIndex) {
   const selected = index == 0 ? 'is-selected' : ''
   const temp = formatTemp(weather.main.temp);
   const hour = new Date(weather.dt * 1000).getHours();
@@ -25,7 +26,7 @@ function dayItemTemplate(weather, index) {
   const icon = `${weather.weather[0].icon}${resolution}`;
 
   return `
-    <li class="dayWeather-item ${selected}">
+    <li class="dayWeather-item ${selected}" id="summary-${parentIndex}${index}">
       <span class="dayWeather-time">${relativeHour} ${time}.&nbsp;m.</span>
       <img
         class="dayWeather-icon"
@@ -52,15 +53,14 @@ function tabPanelTemplate(index) {
   `;
 }
 
-function dailyInfoTemplate(weather, index) {
-  console.log(weather)
+function dailyInfoTemplate(weather, index, parentIndex) {
   const max = formatTemp(weather.main.temp_max)
   const min = formatTemp(weather.main.temp_min)
   const humidity = formatHumidity(weather.main.humidity)
   const wind = formatWind(weather.wind.speed)
   const hidden = index == 0 ? "" : "hidden";
   return `
-    <div ${hidden}>
+    <div ${hidden} class="infoPanel" aria-labelledby="summary-${parentIndex}${index}">
       <div class="dayWeather-summary">
         <p>Max: <b>${max}</b></p>
         <p>Min: <b>${min}</b></p>
@@ -71,17 +71,13 @@ function dailyInfoTemplate(weather, index) {
   `
 }
 
-function handleWeekDayClick(event) {
-  console.log(event)
+function createItem(weather, index, parentIndex) {
+  return createDOM(dayItemTemplate(weather, index, parentIndex));
 }
 
-function createItem(weather, index) {
-  return createDOM(dayItemTemplate(weather, index));
-}
-
-function createItems(weatherList, $ul) {
+function createItems(weatherList, $ul, parentIndex) {
   weatherList.forEach((weather, index) => {
-    const $el = createItem(weather, index);
+    const $el = createItem(weather, index, parentIndex);
     $ul.append($el);
   });
 }
@@ -90,14 +86,14 @@ function createTabPanel(index) {
   return createDOM(tabPanelTemplate(index));
 }
 
-function createInfoDailyPanel(weather, index) {
-  return createDOM(dailyInfoTemplate(weather, index))
+function createInfoDailyPanel(weather, index, parentIndex) {
+  return createDOM(dailyInfoTemplate(weather, index, parentIndex))
 }
 
-function createDailyPanel(weekList, $container) {
+function createDailyPanel(weekList, $container, parentIndex) {
   const $days = $container.querySelectorAll('.dayWeather-item')
   $days.forEach(($li, index) => {
-    const $item = createInfoDailyPanel(weekList[index],index) 
+    const $item = createInfoDailyPanel(weekList[index],index, parentIndex) 
     $container.append($item)
   })
 }   
@@ -108,9 +104,9 @@ function createPanel(weekList, $container) {
     $container.append($el);
     
     const $ul = $el.querySelector(`#dayWeather-list-${index}`);
-    createItems(item, $ul);
+    createItems(item, $ul, index);
     const $panel = document.querySelector(`#dayWeather-${index}`)
-    createDailyPanel(weekList[index], $panel)
+    createDailyPanel(weekList[index], $panel, index)
   });
 }
 
@@ -128,6 +124,7 @@ async function weeklyWeather() {
     const weekList = formatWeekList(data.list);
     configWeeklyWeather(weekList);
     draggable($container);
+    configurePanels()
   } catch (error) {
     console.log(error);
   }
