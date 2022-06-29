@@ -25,3 +25,12 @@ export function formatWeekList(rawData) {
   });
   return weekList;
 }
+
+export function formatHumidity(humidity) {
+  return `${humidity}%`
+}
+
+export function formatWind(wind) {
+  const windKm = Math.round(wind * 3.6)
+  return `${windKm} Km-h`
+}

@@ -19,7 +19,6 @@
 }
 .weeklyWeather-marker:active {
   cursor: row-resize;
-
 }
 .weeklyWeather-marker:before {
   content: '';
